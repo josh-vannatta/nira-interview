@@ -10,12 +10,8 @@ from pipeline.interview_job.ops.get_existing_results import get_existing_results
 from pipeline.interview_job.ops.get_unprocessed_buses import get_unprocessed_buses
 from pipeline.interview_job.ops.combine_results import combine_results
 
-
 @job
 def interview_job():
-    """
-    A job to run the interview pipeline.
-    """
     raw_buses = raw_buses_to_run()
     existing_results = get_existing_results(raw_buses)
     unprocessed_buses = get_unprocessed_buses(raw_buses, existing_results)

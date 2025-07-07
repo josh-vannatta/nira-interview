@@ -11,9 +11,6 @@ from dagster import op, Out, In
     )
 )
 def get_unprocessed_buses(raw_buses, existing_results):
-    """
-    An op to determine which buses are new.
-    """
     if existing_results.empty:
         return raw_buses
 
