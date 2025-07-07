@@ -31,19 +31,6 @@ files = [
 ]
 
 [[package]]
-name = "antlr4-python3-runtime"
-version = "4.13.2"
-description = "ANTLR 4.13.2 runtime for Python 3"
-optional = false
-python-versions = "*"
-groups = ["main"]
-markers = "python_version <= \"3.11\""
-files = [
-    {file = "antlr4_python3_runtime-4.13.2-py3-none-any.whl", hash = "sha256:fe3835eb8d33daece0e799090eda89719dbccee7aa39ef94eed3818cafa5a7e8"},
-    {file = "antlr4_python3_runtime-4.13.2.tar.gz", hash = "sha256:909b647e1d2fc2b70180ac586df3933e38919c85f98ccc656a96cd3f25ef3916"},
-]
-
-[[package]]
 name = "anyio"
 version = "4.9.0"
 description = "High level compatibility layer for multiple asynchronous event loop implementations"
@@ -142,8 +129,8 @@ pathspec = ">=0.9.0,<1"
 platformdirs = ">=2"
 tomli = ">=0.2.6,<2.0.0"
 typing-extensions = [
-    {version = ">=3.10.0.0"},
     {version = ">=3.10.0.0,<3.10.0.1 || >3.10.0.1", markers = "python_version >= \"3.10\""},
+    {version = ">=3.10.0.0", markers = "python_version < \"3.10\""},
 ]
 
 [package.extras]
@@ -233,7 +220,6 @@ description = "croniter provides iteration for datetime object with cron like fo
 optional = false
 python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 groups = ["main"]
-markers = "python_version >= \"3.12\""
 files = [
     {file = "croniter-1.1.0-py2.py3-none-any.whl", hash = "sha256:d30dd147d1daec39d015a15b8cceb3069b9780291b9c141e869c32574a8eeacb"},
     {file = "croniter-1.1.0.tar.gz", hash = "sha256:4023e4d18ced979332369964351e8f4f608c1f7c763e146b1d740002c4245247"},
@@ -249,7 +235,6 @@ description = "Web UI for dagster."
 optional = false
 python-versions = "*"
 groups = ["main"]
-markers = "python_version >= \"3.12\""
 files = [
     {file = "dagit-1.6.6-py3-none-any.whl", hash = "sha256:d5791083eda0e8c588a55cb8458694dddac1d5cbd8797a997e3a5aa250445cad"},
     {file = "dagit-1.6.6.tar.gz", hash = "sha256:5b725d324334bec0d7f6738af2fac48f1d540074f09003ed623900cc2cadd37f"},
@@ -263,33 +248,12 @@ notebook = ["dagster-webserver[notebook] (==1.6.6)"]
 test = ["dagster-webserver[test] (==1.6.6)"]
 
 [[package]]
-name = "dagit"
-version = "1.11.1"
-description = "Web UI for dagster."
-optional = false
-python-versions = "<3.13,>=3.9"
-groups = ["main"]
-markers = "python_version <= \"3.11\""
-files = [
-    {file = "dagit-1.11.1-py3-none-any.whl", hash = "sha256:818f37d336c210cb737ec1f22143c8940c876548d17c13984df6bca542cb8d87"},
-    {file = "dagit-1.11.1.tar.gz", hash = "sha256:3c0efdddca0238b28c034f36ce6b9f41b93b1fbd40e30521d5aa1474556bc4c2"},
-]
-
-[package.dependencies]
-dagster-webserver = "1.11.1"
-
-[package.extras]
-notebook = ["dagster-webserver[notebook] (==1.11.1)"]
-test = ["dagster-webserver[test] (==1.11.1)"]
-
-[[package]]
 name = "dagster"
 version = "1.6.6"
 description = "Dagster is an orchestration platform for the development, production, and observation of data assets."
 optional = false
 python-versions = "*"
 groups = ["main"]
-markers = "python_version >= \"3.12\""
 files = [
     {file = "dagster-1.6.6-py3-none-any.whl", hash = "sha256:973c32647d2bf9c7181741e57915ac972d358417814de844acf7cd4a351dee93"},
     {file = "dagster-1.6.6.tar.gz", hash = "sha256:295a6646eafc6360eea328194d224a27a39d4697da7c8495468ea215ee80c975"},
@@ -306,8 +270,14 @@ grpcio = ">=1.44.0"
 grpcio-health-checking = ">=1.44.0"
 Jinja2 = "*"
 packaging = ">=20.9"
-pendulum = {version = ">=3,<4", markers = "python_version >= \"3.12\""}
-protobuf = {version = ">=4,<5", markers = "python_version >= \"3.11\""}
+pendulum = [
+    {version = ">=0.7.0,<4", markers = "python_version >= \"3.9\" and python_version < \"3.12\""},
+    {version = ">=3,<4", markers = "python_version >= \"3.12\""},
+]
+protobuf = [
+    {version = ">=3.20.0,<5", markers = "python_version < \"3.11\""},
+    {version = ">=4,<5", markers = "python_version >= \"3.11\""},
+]
 psutil = {version = ">=1.0", markers = "platform_system == \"Windows\""}
 pydantic = ">1.10.0,<1.10.7 || >1.10.7,<3"
 python-dateutil = "*"
@@ -325,7 +295,10 @@ tomli = "<3"
 toposort = ">=1.0"
 tqdm = "<5"
 typing-extensions = ">=4.4.0,<5"
-universal-pathlib = {version = ">=0.2.0", markers = "python_version >= \"3.12\""}
+universal-pathlib = [
+    {version = "*", markers = "python_version < \"3.12\""},
+    {version = ">=0.2.0", markers = "python_version >= \"3.12\""},
+]
 watchdog = ">=0.8.3"
 
 [package.extras]
@@ -336,68 +309,12 @@ ruff = ["ruff (==0.2.0)"]
 test = ["buildkite-test-collector ; python_version >= \"3.8\"", "docker", "grpcio-tools (>=1.44.0)", "mock (==3.0.5)", "morefs[asynclocal] ; python_version >= \"3.8\"", "mypy-protobuf", "objgraph", "pytest (>=7.0.1)", "pytest-cov (==2.10.1)", "pytest-dependency (==0.5.1)", "pytest-mock (==3.3.1)", "pytest-rerunfailures (==10.0)", "pytest-runner (==5.2)", "pytest-xdist (==3.3.1)", "responses (<=0.23.1)", "syrupy (<4)", "tox (==3.25.0)"]
 
 [[package]]
-name = "dagster"
-version = "1.11.1"
-description = "Dagster is an orchestration platform for the development, production, and observation of data assets."
-optional = false
-python-versions = "<3.13,>=3.9"
-groups = ["main"]
-markers = "python_version <= \"3.11\""
-files = [
-    {file = "dagster-1.11.1-py3-none-any.whl", hash = "sha256:9b8ad15b690af6bbe766caa46b8ea76551ece39ac82752f1f38f284077df1753"},
-    {file = "dagster-1.11.1.tar.gz", hash = "sha256:11ccd9724104c3d940be922e0b7853abdb299fed82099326056fdb4f4e30acd1"},
-]
-
-[package.dependencies]
-alembic = ">=1.2.1,<1.6.3 || >1.6.3,<1.7.0 || >1.7.0,<1.11.0 || >1.11.0"
-antlr4-python3-runtime = "*"
-click = ">=5.0,<8.2"
-coloredlogs = ">=6.1,<=14.0"
-dagster-pipes = "1.11.1"
-dagster-shared = "1.11.1"
-docstring-parser = "*"
-filelock = "*"
-grpcio = ">=1.44.0"
-grpcio-health-checking = ">=1.44.0"
-Jinja2 = "*"
-protobuf = [
-    {version = ">=3.20.0,<6", markers = "python_version < \"3.11\""},
-    {version = ">=4,<6", markers = "python_version >= \"3.11\""},
-]
-psutil = {version = ">=1.0", markers = "platform_system == \"Windows\""}
-python-dotenv = "*"
-pytz = "*"
-pywin32 = {version = "!=226", markers = "platform_system == \"Windows\""}
-requests = "*"
-rich = "*"
-setuptools = "*"
-six = "*"
-sqlalchemy = ">=1.0,<3"
-structlog = "*"
-tabulate = "*"
-tomli = "<3"
-toposort = ">=1.0"
-tqdm = "<5"
-tzdata = {version = "*", markers = "platform_system == \"Windows\""}
-universal_pathlib = {version = "*", markers = "python_version < \"3.12\""}
-watchdog = ">=0.8.3,<6"
-
-[package.extras]
-docker = ["docker"]
-mypy = ["mypy (==1.8.0)"]
-pyright = ["pandas-stubs", "pyright (==1.1.379)", "types-PyYAML", "types-backports", "types-certifi", "types-chardet", "types-cryptography", "types-mock", "types-paramiko", "types-pyOpenSSL", "types-python-dateutil (>=2.9.0.20240316,<2.10.0.0)", "types-pytz", "types-requests", "types-simplejson", "types-six", "types-tabulate", "types-toml", "types-tzlocal"]
-ruff = ["ruff (==0.11.5)"]
-test = ["buildkite-test-collector", "docker", "flaky", "fsspec (<2024.5.0)", "grpcio-tools (>=1.44.0)", "morefs[asynclocal]", "mypy-protobuf", "objgraph", "psutil", "pytest (>=8)", "pytest-asyncio", "pytest-cov (==5.0.0)", "pytest-mock (==3.14.0)", "pytest-timeout", "pytest-xdist (==3.6.1)", "rapidfuzz", "responses (<=0.23.1)", "ruff (==0.11.5)", "syrupy (>=4.0.0)", "tox (>=4)"]
-test-components = ["duckdb", "jsonschema", "pandas", "tomlkit"]
-
-[[package]]
 name = "dagster-graphql"
 version = "1.6.6"
 description = "The GraphQL frontend to python dagster."
 optional = false
 python-versions = "*"
 groups = ["main"]
-markers = "python_version >= \"3.12\""
 files = [
     {file = "dagster-graphql-1.6.6.tar.gz", hash = "sha256:abf1df81961c74443586b9ed1dd62c8aecb1e2df1b68f63238425cd786a200dd"},
     {file = "dagster_graphql-1.6.6-py3-none-any.whl", hash = "sha256:f36b48ff6b95513574d77069e3934e67830702dea99baed39d95ef0d12dde7d3"},
@@ -411,79 +328,16 @@ requests = "*"
 starlette = "*"
 
 [[package]]
-name = "dagster-graphql"
-version = "1.11.1"
-description = "The GraphQL frontend to python dagster."
-optional = false
-python-versions = "<3.13,>=3.9"
-groups = ["main"]
-markers = "python_version <= \"3.11\""
-files = [
-    {file = "dagster_graphql-1.11.1-py3-none-any.whl", hash = "sha256:0f499bbd24f710aee1bbbeb28308696adf1d124252f6c725cc9a1debc6e405b1"},
-    {file = "dagster_graphql-1.11.1.tar.gz", hash = "sha256:001fa9798161a446ed146a0d1b9bebe1a6f4f7bffc14a6fdf2f78a017418c8ea"},
-]
-
-[package.dependencies]
-dagster = "1.11.1"
-gql = {version = ">=3,<4", extras = ["requests"]}
-graphene = ">=3,<4"
-requests = "*"
-starlette = "*"
-
-[package.extras]
-test = ["dagster-test"]
-
-[[package]]
 name = "dagster-pipes"
 version = "1.6.6"
 description = "Toolkit for Dagster integrations with transform logic outside of Dagster"
 optional = false
 python-versions = "*"
 groups = ["main"]
-markers = "python_version >= \"3.12\""
 files = [
     {file = "dagster-pipes-1.6.6.tar.gz", hash = "sha256:67467f11b10ce441ba8b3f0ce7e3ed203991c614f4a7fd0642befe625d50434e"},
     {file = "dagster_pipes-1.6.6-py3-none-any.whl", hash = "sha256:e2ef924390e53c49db2b2f4ec49e243c4b4c12fb75b41fa5b555cbe4745a5908"},
 ]
-
-[[package]]
-name = "dagster-pipes"
-version = "1.11.1"
-description = "Toolkit for Dagster integrations with transform logic outside of Dagster"
-optional = false
-python-versions = "<3.13,>=3.9"
-groups = ["main"]
-markers = "python_version <= \"3.11\""
-files = [
-    {file = "dagster_pipes-1.11.1-py3-none-any.whl", hash = "sha256:716ba9bd151c5ee11d7bb2481ef00acdcf722b075719ffb4b18e4488e15c4e4d"},
-    {file = "dagster_pipes-1.11.1.tar.gz", hash = "sha256:7d1d88e809ada33b79fd3eb497043bdc3e9adc57a5d5c7c24f16e278a0c9b8c0"},
-]
-
-[package.extras]
-stubs = ["google-cloud-storage"]
-
-[[package]]
-name = "dagster-shared"
-version = "1.11.1"
-description = "Shared code between dagster and dagster-dg-core."
-optional = false
-python-versions = "*"
-groups = ["main"]
-markers = "python_version <= \"3.11\""
-files = [
-    {file = "dagster_shared-1.11.1-py3-none-any.whl", hash = "sha256:99734129c3b79fd9797e6c4b9bef1cfff4694caa9742554560aff96182f03042"},
-    {file = "dagster_shared-1.11.1.tar.gz", hash = "sha256:72397ae50f013b3009d3b6d6756bc6458c902804169ae9ce3403d118d5b3dfa5"},
-]
-
-[package.dependencies]
-packaging = ">=20.9"
-pydantic = ">=2,<3.0.0"
-PyYAML = ">=5.1"
-tomlkit = "*"
-typing_extensions = ">=4.11.0,<5"
-
-[package.extras]
-test = ["buildkite-test-collector", "flaky", "pytest"]
 
 [[package]]
 name = "dagster-webserver"
@@ -492,7 +346,6 @@ description = "Web UI for dagster."
 optional = false
 python-versions = "*"
 groups = ["main"]
-markers = "python_version >= \"3.12\""
 files = [
     {file = "dagster-webserver-1.6.6.tar.gz", hash = "sha256:b3ed08ac55a4700e8190b7f552b152e6d7e055b4d5d54f9f3eb123faeb8e5151"},
     {file = "dagster_webserver-1.6.6-py3-none-any.whl", hash = "sha256:27a994d9b864e5fc1c0930aa96cc03b2023837a0f108f4cee0a6f7c54c5fb95a"},
@@ -502,30 +355,6 @@ files = [
 click = ">=7.0,<9.0"
 dagster = "1.6.6"
 dagster-graphql = "1.6.6"
-starlette = "!=0.36.0"
-uvicorn = {version = "*", extras = ["standard"]}
-
-[package.extras]
-notebook = ["nbconvert"]
-test = ["starlette[full]"]
-
-[[package]]
-name = "dagster-webserver"
-version = "1.11.1"
-description = "Web UI for dagster."
-optional = false
-python-versions = "<3.13,>=3.9"
-groups = ["main"]
-markers = "python_version <= \"3.11\""
-files = [
-    {file = "dagster_webserver-1.11.1-py3-none-any.whl", hash = "sha256:d7b37305341452aee44b21335eedf3d10d4b54f0c85bcab68c8e8edba1bed2fa"},
-    {file = "dagster_webserver-1.11.1.tar.gz", hash = "sha256:8754ccd4a762cc80f52a32a10358dc10f440c444f6f37276324667b8f6fa7de9"},
-]
-
-[package.dependencies]
-click = ">=7.0,<9.0"
-dagster = "1.11.1"
-dagster-graphql = "1.11.1"
 starlette = "!=0.36.0"
 uvicorn = {version = "*", extras = ["standard"]}
 
@@ -577,24 +406,6 @@ typing-extensions = {version = ">=4.6.0", markers = "python_version < \"3.13\""}
 
 [package.extras]
 test = ["pytest (>=6)"]
-
-[[package]]
-name = "filelock"
-version = "3.18.0"
-description = "A platform independent file lock."
-optional = false
-python-versions = ">=3.9"
-groups = ["main"]
-markers = "python_version <= \"3.11\""
-files = [
-    {file = "filelock-3.18.0-py3-none-any.whl", hash = "sha256:c401f4f8377c4464e6db25fff06205fd89bdd83b65eb0488ed1b160f780e21de"},
-    {file = "filelock-3.18.0.tar.gz", hash = "sha256:adbc88eabb99d2fec8c9c1b229b171f18afa655400173ddc653d5d01501fb9f2"},
-]
-
-[package.extras]
-docs = ["furo (>=2024.8.6)", "sphinx (>=8.1.3)", "sphinx-autodoc-typehints (>=3)"]
-testing = ["covdefaults (>=2.3)", "coverage (>=7.6.10)", "diff-cover (>=9.2.1)", "pytest (>=8.3.4)", "pytest-asyncio (>=0.25.2)", "pytest-cov (>=6)", "pytest-mock (>=3.14)", "pytest-timeout (>=2.3.1)", "virtualenv (>=20.28.1)"]
-typing = ["typing-extensions (>=4.12.2) ; python_version < \"3.11\""]
 
 [[package]]
 name = "flake8"
@@ -876,7 +687,6 @@ description = "Standard Health Checking Service for gRPC"
 optional = false
 python-versions = ">=3.6"
 groups = ["main"]
-markers = "python_version >= \"3.12\""
 files = [
     {file = "grpcio-health-checking-1.62.3.tar.gz", hash = "sha256:5074ba0ce8f0dcfe328408ec5c7551b2a835720ffd9b69dade7fa3e0dc1c7a93"},
     {file = "grpcio_health_checking-1.62.3-py3-none-any.whl", hash = "sha256:f29da7dd144d73b4465fe48f011a91453e9ff6c8af0d449254cf80021cab3e0d"},
@@ -885,23 +695,6 @@ files = [
 [package.dependencies]
 grpcio = ">=1.62.3"
 protobuf = ">=4.21.6"
-
-[[package]]
-name = "grpcio-health-checking"
-version = "1.71.2"
-description = "Standard Health Checking Service for gRPC"
-optional = false
-python-versions = ">=3.9"
-groups = ["main"]
-markers = "python_version <= \"3.11\""
-files = [
-    {file = "grpcio_health_checking-1.71.2-py3-none-any.whl", hash = "sha256:f91db41410d6bd18a7828c5b6ac2bebd77a63483263cbe42bf3c0c9b86cece33"},
-    {file = "grpcio_health_checking-1.71.2.tar.gz", hash = "sha256:1c21ece88c641932f432b573ef504b20603bdf030ad4e1ec35dd7fdb4ea02637"},
-]
-
-[package.dependencies]
-grpcio = ">=1.71.2"
-protobuf = ">=5.26.1,<6.0dev"
 
 [[package]]
 name = "h11"
@@ -1523,9 +1316,9 @@ files = [
 
 [package.dependencies]
 numpy = [
+    {version = ">=1.21.0", markers = "python_version >= \"3.10\""},
     {version = ">=1.20.3", markers = "python_version < \"3.10\""},
     {version = ">=1.23.2", markers = "python_version >= \"3.11\""},
-    {version = ">=1.21.0", markers = "python_version == \"3.10\""},
 ]
 python-dateutil = ">=2.8.1"
 pytz = ">=2020.1"
@@ -1584,7 +1377,6 @@ description = "Python datetimes made easy"
 optional = false
 python-versions = ">=3.9"
 groups = ["main"]
-markers = "python_version >= \"3.12\""
 files = [
     {file = "pendulum-3.1.0-cp310-cp310-macosx_10_12_x86_64.whl", hash = "sha256:aa545a59e6517cf43597455a6fb44daa4a6e08473d67a7ad34e4fa951efb9620"},
     {file = "pendulum-3.1.0-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:299df2da6c490ede86bb8d58c65e33d7a2a42479d21475a54b467b03ccb88531"},
@@ -1806,7 +1598,6 @@ description = ""
 optional = false
 python-versions = ">=3.8"
 groups = ["main"]
-markers = "python_version >= \"3.12\""
 files = [
     {file = "protobuf-4.25.8-cp310-abi3-win32.whl", hash = "sha256:504435d831565f7cfac9f0714440028907f1975e4bed228e58e72ecfff58a1e0"},
     {file = "protobuf-4.25.8-cp310-abi3-win_amd64.whl", hash = "sha256:bd551eb1fe1d7e92c1af1d75bdfa572eff1ab0e5bf1736716814cdccdb2360f9"},
@@ -1819,28 +1610,6 @@ files = [
     {file = "protobuf-4.25.8-cp39-cp39-win_amd64.whl", hash = "sha256:f4510b93a3bec6eba8fd8f1093e9d7fb0d4a24d1a81377c10c0e5bbfe9e4ed24"},
     {file = "protobuf-4.25.8-py3-none-any.whl", hash = "sha256:15a0af558aa3b13efef102ae6e4f3efac06f1eea11afb3a57db2901447d9fb59"},
     {file = "protobuf-4.25.8.tar.gz", hash = "sha256:6135cf8affe1fc6f76cced2641e4ea8d3e59518d1f24ae41ba97bcad82d397cd"},
-]
-
-[[package]]
-name = "protobuf"
-version = "5.29.5"
-description = ""
-optional = false
-python-versions = ">=3.8"
-groups = ["main"]
-markers = "python_version <= \"3.11\""
-files = [
-    {file = "protobuf-5.29.5-cp310-abi3-win32.whl", hash = "sha256:3f1c6468a2cfd102ff4703976138844f78ebd1fb45f49011afc5139e9e283079"},
-    {file = "protobuf-5.29.5-cp310-abi3-win_amd64.whl", hash = "sha256:3f76e3a3675b4a4d867b52e4a5f5b78a2ef9565549d4037e06cf7b0942b1d3fc"},
-    {file = "protobuf-5.29.5-cp38-abi3-macosx_10_9_universal2.whl", hash = "sha256:e38c5add5a311f2a6eb0340716ef9b039c1dfa428b28f25a7838ac329204a671"},
-    {file = "protobuf-5.29.5-cp38-abi3-manylinux2014_aarch64.whl", hash = "sha256:fa18533a299d7ab6c55a238bf8629311439995f2e7eca5caaff08663606e9015"},
-    {file = "protobuf-5.29.5-cp38-abi3-manylinux2014_x86_64.whl", hash = "sha256:63848923da3325e1bf7e9003d680ce6e14b07e55d0473253a690c3a8b8fd6e61"},
-    {file = "protobuf-5.29.5-cp38-cp38-win32.whl", hash = "sha256:ef91363ad4faba7b25d844ef1ada59ff1604184c0bcd8b39b8a6bef15e1af238"},
-    {file = "protobuf-5.29.5-cp38-cp38-win_amd64.whl", hash = "sha256:7318608d56b6402d2ea7704ff1e1e4597bee46d760e7e4dd42a3d45e24b87f2e"},
-    {file = "protobuf-5.29.5-cp39-cp39-win32.whl", hash = "sha256:6f642dc9a61782fa72b90878af134c5afe1917c89a568cd3476d758d3c3a0736"},
-    {file = "protobuf-5.29.5-cp39-cp39-win_amd64.whl", hash = "sha256:470f3af547ef17847a28e1f47200a1cbf0ba3ff57b7de50d22776607cd2ea353"},
-    {file = "protobuf-5.29.5-py3-none-any.whl", hash = "sha256:6cf42630262c59b2d8de33954443d94b746c952b01434fc58a417fdbd2e84bd5"},
-    {file = "protobuf-5.29.5.tar.gz", hash = "sha256:bc1463bafd4b0929216c35f437a8e28731a2b7fe3d98bb77a600efced5a15c84"},
 ]
 
 [[package]]
@@ -2675,19 +2444,6 @@ files = [
 ]
 
 [[package]]
-name = "tomlkit"
-version = "0.13.3"
-description = "Style preserving TOML library"
-optional = false
-python-versions = ">=3.8"
-groups = ["main"]
-markers = "python_version <= \"3.11\""
-files = [
-    {file = "tomlkit-0.13.3-py3-none-any.whl", hash = "sha256:c89c649d79ee40629a9fda55f8ace8c6a1b42deb912b2a8fd8d942ddadb606b0"},
-    {file = "tomlkit-0.13.3.tar.gz", hash = "sha256:430cf247ee57df2b94ee3fbe588e71d362a941ebb545dec29b53961d61add2a1"},
-]
-
-[[package]]
 name = "toposort"
 version = "1.7"
 description = "\"Implements a topological sort algorithm.\""
@@ -2770,7 +2526,6 @@ description = "Provider of IANA time zone data"
 optional = false
 python-versions = ">=2"
 groups = ["main"]
-markers = "platform_system == \"Windows\" or python_version >= \"3.12\""
 files = [
     {file = "tzdata-2025.2-py2.py3-none-any.whl", hash = "sha256:1a403fada01ff9221ca8044d701868fa132215d84beb92242d9acd2147f667a8"},
     {file = "tzdata-2025.2.tar.gz", hash = "sha256:b60a638fcc0daffadf82fe0f57e53d06bdec2f36c4df66280ae79bce6bd6f2b9"},
@@ -2846,7 +2601,7 @@ description = "Fast implementation of asyncio event loop on top of libuv"
 optional = false
 python-versions = ">=3.8.0"
 groups = ["main"]
-markers = "sys_platform != \"win32\" and sys_platform != \"cygwin\" and platform_python_implementation != \"PyPy\""
+markers = "platform_python_implementation != \"PyPy\" and sys_platform != \"win32\" and sys_platform != \"cygwin\""
 files = [
     {file = "uvloop-0.21.0-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:ec7e6b09a6fdded42403182ab6b832b71f4edaf7f37a9a0e371a01db5f0cb45f"},
     {file = "uvloop-0.21.0-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:196274f2adb9689a289ad7d65700d37df0c0930fd8e4e743fa4834e850d7719d"},

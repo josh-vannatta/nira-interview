@@ -8,6 +8,8 @@ _DUMMY_BUS_NUMBER_TO_MW_AVAILABLE = {
     "12a": 110_000,
     "13a": 140_000,
     "14a": 160_000,
+    "15a": 180_000,
+    "16a": 200_000,
 }
 
 
@@ -22,7 +24,7 @@ def get_mw_available_for_each_bus_very_slow(df_bus_numbers):
 
 def _run_slow_calculation_for_bus(bus_number):
     get_dagster_logger().info(f"Starting calculation for bus {bus_number}")
-    sleep(300)
+    sleep(10)
     get_dagster_logger().info(f"Finished calculation for bus {bus_number}")
 
     return _DUMMY_BUS_NUMBER_TO_MW_AVAILABLE[bus_number]
